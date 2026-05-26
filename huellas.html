@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>huellas · último rincón</title>
+    <style>
+        body {
+            background: #1a1210;
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .rincon {
+            max-width: 500px;
+            background: #faf0e1;
+            padding: 2rem;
+            border: 8px solid #4a3528;
+        }
+        .huella-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .huella-input {
+            flex: 1;
+            padding: 0.5rem;
+            font-family: monospace;
+            border: 1px solid #b8a080;
+        }
+        .huella-btn {
+            background: #4a3528;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: monospace;
+        }
+        .lista {
+            list-style: none;
+        }
+        .lista li {
+            border-bottom: 1px dashed #d4c5a9;
+            padding: 0.8rem 0;
+        }
+        .firma {
+            font-size: 0.7rem;
+            color: #8a7a60;
+            margin-top: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+<div class="rincon">
+    <h2>🕯️ últimas 10 huellas</h2>
+    <div class="huella-form">
+        <input type="text" class="huella-input" id="mensajeInput" placeholder="tu huella...">
+        <button class="huella-btn" id="dejarBtn">dejar</button>
+    </div>
+    <ul class="lista" id="listaHuellas"></ul>
+</div>
+
+<script>
+    // cargar huellas guardadas
+    let huellas = JSON.parse(localStorage.getItem('huellas')) || [];
+
+    function mostrarHuellas() {
+        const lista = document.getElementById('listaHuellas');
+        lista.innerHTML = '';
+        // mostrar últimas 10 (más recientes primero)
+        const ultimas10 = [...huellas].reverse().slice(0,10);
+        ultimas10.forEach(h => {
+            const li = document.createElement('li');
+            li.innerHTML = `► "${h.texto}"<div class="firma">— ${h.firma} · ${h.hora}</div>`;
+            lista.appendChild(li);
+        });
+    }
+
+    function dejarHuella() {
+        const input = document.getElementById('mensajeInput');
+        const texto = input.value.trim();
+        if(texto === '') return;
+
+        const ahora = new Date();
+        const horaFormateada = ahora.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        
+        huellas.push({
+            texto: texto,
+            firma: 'alguien',
+            hora: horaFormateada
+        });
+
+        // mantener solo las últimas 20 (para poder mostrar 10)
+        if(huellas.length > 20) huellas.shift();
+
+        localStorage.setItem('huellas', JSON.stringify(huellas));
+        input.value = '';
+        mostrarHuellas();
+    }
+
+    document.getElementById('dejarBtn').addEventListener('click', dejarHuella);
+    document.getElementById('mensajeInput').addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') dejarHuella();
+    });
+
+    mostrarHuellas();
+</script>
+</body>
+</html>
