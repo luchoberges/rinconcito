@@ -5,17 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>rinconcito · el último rincón de internet</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #1a1210;
-            background-image: 
-                linear-gradient(rgba(80, 60, 45, 0.3) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(80, 60, 45, 0.3) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(80,60,45,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(80,60,45,0.3) 1px, transparent 1px);
             background-size: 20px 20px;
             min-height: 100vh;
             display: flex;
@@ -24,7 +17,6 @@
             padding: 2rem;
             font-family: 'Courier New', 'VT323', monospace;
         }
-
         .rincon {
             max-width: 600px;
             width: 100%;
@@ -34,33 +26,28 @@
             border: 8px solid #4a3528;
             box-shadow: 0 0 0 4px #8b694a, 0 8px 20px rgba(0,0,0,0.5);
         }
-
         .cabecera {
             background: #2c211c;
             padding: 0.8rem;
             border-bottom: 3px solid #4a3528;
             text-align: center;
         }
-
         .cabecera h1 {
             color: #d4c5a9;
             font-size: 1.2rem;
             letter-spacing: 3px;
             font-weight: normal;
         }
-
         .cabecera p {
             color: #6b5a48;
             font-size: 0.7rem;
             margin-top: 0.3rem;
         }
-
         .huella-form {
             padding: 1.5rem;
             background: #fff5e8;
             border-bottom: 1px dashed #d4c5a9;
         }
-
         .huella-input, .nombre-input {
             width: 100%;
             padding: 0.7rem;
@@ -70,12 +57,6 @@
             background: #fffef8;
             font-size: 0.9rem;
         }
-
-        .huella-input:focus, .nombre-input:focus {
-            outline: none;
-            border-color: #a88b6a;
-        }
-
         .huella-btn {
             background: #4a3528;
             color: #d4c5a9;
@@ -85,17 +66,9 @@
             font-size: 0.9rem;
             cursor: pointer;
             width: 100%;
-            transition: 0.1s;
         }
-
-        .huella-btn:hover {
-            background: #6b4f38;
-        }
-
-        .lista-section {
-            padding: 1.5rem;
-        }
-
+        .huella-btn:hover { background: #6b4f38; }
+        .lista-section { padding: 1.5rem; }
         .lista-section h3 {
             color: #4a3528;
             font-size: 0.8rem;
@@ -103,45 +76,15 @@
             margin-bottom: 1rem;
             text-transform: uppercase;
         }
-
-        .lista {
-            list-style: none;
-        }
-
+        .lista { list-style: none; }
         .lista li {
             border-bottom: 1px dashed #e2d5c0;
             padding: 1rem 0;
         }
-
-        .huella-texto {
-            font-size: 0.95rem;
-            color: #2a1f1a;
-            line-height: 1.4;
-        }
-
-        .huella-firma {
-            font-size: 0.65rem;
-            color: #a88b6a;
-            margin-top: 0.4rem;
-            font-style: italic;
-        }
-
-        .estado {
-            text-align: center;
-            font-size: 0.7rem;
-            color: #8a7a60;
-            padding: 0.8rem;
-            border-top: 1px solid #e2d5c0;
-        }
-
-        .footer {
-            background: #2c211c;
-            padding: 0.8rem;
-            text-align: center;
-            font-size: 0.6rem;
-            color: #6b5a48;
-            border-top: 1px solid #4a3528;
-        }
+        .huella-texto { font-size: 0.95rem; color: #2a1f1a; line-height: 1.4; }
+        .huella-firma { font-size: 0.65rem; color: #a88b6a; margin-top: 0.4rem; font-style: italic; }
+        .estado { text-align: center; font-size: 0.7rem; color: #8a7a60; padding: 0.8rem; border-top: 1px solid #e2d5c0; }
+        .footer { background: #2c211c; padding: 0.8rem; text-align: center; font-size: 0.6rem; color: #6b5a48; border-top: 1px solid #4a3528; }
     </style>
 </head>
 <body>
@@ -150,211 +93,112 @@
         <h1>🕯️ rinconcito</h1>
         <p>el último rincón de internet · deja tu huella</p>
     </div>
-
     <div class="huella-form">
         <input type="text" class="nombre-input" id="nombreInput" placeholder="tu nombre o seudónimo" maxlength="30">
-        <input type="text" class="huella-input" id="mensajeInput" placeholder="tu huella... (qué sentís, qué pensás, lo que sea)" maxlength="200">
+        <input type="text" class="huella-input" id="mensajeInput" placeholder="tu huella..." maxlength="200">
         <button class="huella-btn" id="dejarBtn">✦ dejar huella ✦</button>
     </div>
-
     <div class="lista-section">
         <h3>📜 las últimas huellas</h3>
         <ul class="lista" id="listaHuellas">
             <li style="color:#aa9a7a; text-align:center;">cargando huellas...</li>
         </ul>
     </div>
-
     <div class="estado" id="estadoMsg"></div>
-    <div class="footer">
-        cada huella queda para siempre · sin borrar, sin editar
-    </div>
+    <div class="footer">cada huella queda para siempre · sin borrar, sin editar</div>
 </div>
 
 <script>
-    // ⚠️ IMPORTANTE: cambiá estas URLs por las tuyas ⚠️
-    const API_URL = "https://script.google.com/macros/s/AKfycbwlmE1OUSxlAR1YTrXH3bOeUpqUwuJU7I0e4cT7JXsn12-EUiog9XqAdRpEYk9IBpo6-w/exec";
-    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTkd0Ys89RGn0M3pn1PuU5cgWgeX3REAiJkAxFfAA3Ec1ht5MfYE8tEz51naLmkVtmC2tTpo-5lTsrR/pub?output=csv";
+    // ⚠️ REEMPLAZÁ ESTA URL CON LA TUYA (la de Apps Script que termina en /exec)
+    const API_URL = "https://script.google.com/macros/s/AKfycbzG6YlGVe7Jb9Gr7_Yl5vJX6X4fjeuQ3V_B_TWXZBokklyV7hvoNnKx_vS7ePKqZcKgoQ/exec";
 
-    let cargando = false;
-
-    // mostrar mensaje de estado
     function mostrarEstado(msg, error = false) {
         const estadoDiv = document.getElementById('estadoMsg');
         estadoDiv.innerText = msg;
         estadoDiv.style.color = error ? '#b87c4a' : '#8a7a60';
-        setTimeout(() => {
-            if (estadoDiv.innerText === msg) {
-                estadoDiv.innerText = '';
-            }
-        }, 3000);
+        setTimeout(() => { if (estadoDiv.innerText === msg) estadoDiv.innerText = ''; }, 3000);
     }
 
-    // cargar huellas desde Google Sheets
-async function cargarHuellas() {
-    try {
-        const response = await fetch(CSV_URL + '?t=' + new Date().getTime());
-        const csvText = await response.text();
-        
-        console.log("CSV recibido:", csvText); // para debug
-        
-        // parsear CSV más robusto
-        const lineas = csvText.split(/\r?\n/);
-        const huellas = [];
-        
-        let esPrimeraLinea = true;
-        for(let i = 0; i < lineas.length; i++) {
-            const linea = lineas[i].trim();
-            if(linea === '') continue;
+    async function cargarHuellas() {
+        try {
+            const response = await fetch(API_URL + '?t=' + new Date().getTime());
+            const huellas = await response.json();
             
-            // saltar encabezado (primera línea)
-            if(esPrimeraLinea) {
-                esPrimeraLinea = false;
-                continue;
+            console.log("Huellas recibidas:", huellas);
+            
+            if (!huellas || huellas.length === 0) {
+                const lista = document.getElementById('listaHuellas');
+                lista.innerHTML = '<li style="color:#aa9a7a; text-align:center;">✨ todavía no hay huellas. sé el primero ✨</li>';
+                return;
             }
             
-            // separar respetando comillas
-            const partes = [];
-            let parteActual = '';
-            let dentroComillas = false;
-            
-            for(let char of linea) {
-                if(char === '"') {
-                    dentroComillas = !dentroComillas;
-                } else if(char === ',' && !dentroComillas) {
-                    partes.push(parteActual);
-                    parteActual = '';
-                } else {
-                    parteActual += char;
-                }
-            }
-            partes.push(parteActual);
-            
-            // limpiar comillas sobrantes
-            for(let j = 0; j < partes.length; j++) {
-                partes[j] = partes[j].replace(/^"|"$/g, '').trim();
-            }
-            
-            if(partes.length >= 3 && partes[0] !== '' && partes[0] !== 'texto') {
-                huellas.push({
-                    texto: partes[0],
-                    firma: partes[1] || 'anónimx',
-                    hora: partes[2] || '?'
-                });
-            }
-        }
-        
-        console.log("Huellas parseadas:", huellas);
-        
-        if(huellas.length === 0) {
             const lista = document.getElementById('listaHuellas');
-            lista.innerHTML = '<li style="color:#aa9a7a; text-align:center;">✨ todavía no hay huellas. sé el primero ✨</li>';
-            return;
+            lista.innerHTML = '';
+            for (let i = 0; i < Math.min(huellas.length, 15); i++) {
+                const h = huellas[i];
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="huella-texto">"${escapeHtml(h.texto)}"</div>
+                    <div class="huella-firma">— ${escapeHtml(h.firma || 'anónimx')} · ${escapeHtml(h.hora)}</div>
+                `;
+                lista.appendChild(li);
+            }
+        } catch(e) {
+            console.error('Error al cargar:', e);
+            mostrarEstado('✗ no se pudieron cargar las huellas', true);
+            const lista = document.getElementById('listaHuellas');
+            lista.innerHTML = '<li style="color:#b87c4a; text-align:center;">✗ error al cargar. revisá la consola.</li>';
         }
-        
-        // mostrar últimas 15 (más recientes al final del CSV)
-        const ultimas = huellas.slice(-15).reverse();
-        mostrarHuellas(ultimas);
-        
-    } catch(e) {
-        console.error('Error al cargar:', e);
-        mostrarEstado('✗ no se pudieron cargar las huellas', true);
-        const lista = document.getElementById('listaHuellas');
-        lista.innerHTML = '<li style="color:#b87c4a; text-align:center;">✗ error al cargar. revisá la consola.</li>';
-    }
-}
-
-    function mostrarHuellas(huellas) {
-        const lista = document.getElementById('listaHuellas');
-        lista.innerHTML = '';
-        
-        huellas.forEach(h => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <div class="huella-texto">"${escapeHtml(h.texto)}"</div>
-                <div class="huella-firma">— ${escapeHtml(h.firma || 'anónimx')} · ${escapeHtml(h.hora)}</div>
-            `;
-            lista.appendChild(li);
-        });
     }
 
-    function escapeHtml(str) {
-        if(!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if(m === '&') return '&amp;';
-            if(m === '<') return '&lt;';
-            if(m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    // guardar nueva huella
     async function guardarHuella(texto, firma) {
         const ahora = new Date();
         const horaFormateada = ahora.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
         
-        const data = {
-            texto: texto,
-            firma: firma || 'anónimx',
-            hora: horaFormateada
-        };
+        const data = { texto: texto, firma: firma || 'anónimx', hora: horaFormateada };
         
         try {
-            const response = await fetch(API_URL, {
+            await fetch(API_URL, {
                 method: 'POST',
-                mode: 'no-cors', // necesario para Apps Script
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-            
-            // con no-cors no podemos leer la respuesta, asumimos éxito
             mostrarEstado('✨ huella guardada · ya forma parte del rincón ✨');
-            
-            // esperar un poco y recargar las huellas
-            setTimeout(() => {
-                cargarHuellas();
-            }, 1000);
-            
+            setTimeout(() => cargarHuellas(), 1000);
         } catch(e) {
             console.error('Error al guardar:', e);
             mostrarEstado('✗ no se pudo guardar la huella', true);
         }
     }
 
-    // evento del botón
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
     document.getElementById('dejarBtn').addEventListener('click', () => {
         const mensaje = document.getElementById('mensajeInput').value.trim();
         const nombre = document.getElementById('nombreInput').value.trim();
-        
-        if(mensaje === '') {
+        if (mensaje === '') {
             mostrarEstado('✗ escribí algo antes de dejar tu huella', true);
             return;
         }
-        
-        if(mensaje.length > 200) {
-            mostrarEstado('✗ el mensaje es muy largo (máximo 200 caracteres)', true);
-            return;
-        }
-        
         guardarHuella(mensaje, nombre);
-        
-        // limpiar inputs
         document.getElementById('mensajeInput').value = '';
         document.getElementById('nombreInput').value = '';
     });
-    
-    // permitir Enter en el campo de mensaje
+
     document.getElementById('mensajeInput').addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') {
-            document.getElementById('dejarBtn').click();
-        }
+        if (e.key === 'Enter') document.getElementById('dejarBtn').click();
     });
-    
-    // cargar al inicio
+
     cargarHuellas();
-    
-    // recargar cada 30 segundos (para ver nuevas huellas en tiempo real)
     setInterval(cargarHuellas, 30000);
 </script>
 </body>
