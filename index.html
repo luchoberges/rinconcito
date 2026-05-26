@@ -190,50 +190,78 @@
     }
 
     // cargar huellas desde Google Sheets
-    async function cargarHuellas() {
-        try {
-            const response = await fetch(CSV_URL + '?t=' + new Date().getTime()); // evitar caché
-            const csvText = await response.text();
+async function cargarHuellas() {
+    try {
+        const response = await fetch(CSV_URL + '?t=' + new Date().getTime());
+        const csvText = await response.text();
+        
+        console.log("CSV recibido:", csvText); // para debug
+        
+        // parsear CSV más robusto
+        const lineas = csvText.split(/\r?\n/);
+        const huellas = [];
+        
+        let esPrimeraLinea = true;
+        for(let i = 0; i < lineas.length; i++) {
+            const linea = lineas[i].trim();
+            if(linea === '') continue;
             
-            // parsear CSV manual simple
-            const lineas = csvText.split('\n');
-            const huellas = [];
+            // saltar encabezado (primera línea)
+            if(esPrimeraLinea) {
+                esPrimeraLinea = false;
+                continue;
+            }
             
-            for(let i = 1; i < lineas.length; i++) { // empezar desde 1 para saltar encabezado
-                const linea = lineas[i].trim();
-                if(linea === '') continue;
-                
-                // separar por comas (simple, funciona si no hay comas dentro)
-                const partes = linea.split(',');
-                if(partes.length >= 3) {
-                    let texto = partes[0];
-                    let firma = partes[1];
-                    let hora = partes[2];
-                    
-                    // sacar comillas si tienen
-                    texto = texto.replace(/^"|"$/g, '');
-                    firma = firma.replace(/^"|"$/g, '');
-                    hora = hora.replace(/^"|"$/g, '');
-                    
-                    if(texto && texto !== 'texto') {
-                        huellas.push({ texto, firma, hora });
-                    }
+            // separar respetando comillas
+            const partes = [];
+            let parteActual = '';
+            let dentroComillas = false;
+            
+            for(let char of linea) {
+                if(char === '"') {
+                    dentroComillas = !dentroComillas;
+                } else if(char === ',' && !dentroComillas) {
+                    partes.push(parteActual);
+                    parteActual = '';
+                } else {
+                    parteActual += char;
                 }
             }
+            partes.push(parteActual);
             
-            // mostrar solo últimas 15
-            const ultimas = huellas.slice(0, 15);
-            mostrarHuellas(ultimas);
-            
-            if(ultimas.length === 0) {
-                const lista = document.getElementById('listaHuellas');
-                lista.innerHTML = '<li style="color:#aa9a7a; text-align:center;">✨ todavía no hay huellas. sé el primero ✨</li>';
+            // limpiar comillas sobrantes
+            for(let j = 0; j < partes.length; j++) {
+                partes[j] = partes[j].replace(/^"|"$/g, '').trim();
             }
-        } catch(e) {
-            console.error('Error al cargar:', e);
-            mostrarEstado('✗ no se pudieron cargar las huellas', true);
+            
+            if(partes.length >= 3 && partes[0] !== '' && partes[0] !== 'texto') {
+                huellas.push({
+                    texto: partes[0],
+                    firma: partes[1] || 'anónimx',
+                    hora: partes[2] || '?'
+                });
+            }
         }
+        
+        console.log("Huellas parseadas:", huellas);
+        
+        if(huellas.length === 0) {
+            const lista = document.getElementById('listaHuellas');
+            lista.innerHTML = '<li style="color:#aa9a7a; text-align:center;">✨ todavía no hay huellas. sé el primero ✨</li>';
+            return;
+        }
+        
+        // mostrar últimas 15 (más recientes al final del CSV)
+        const ultimas = huellas.slice(-15).reverse();
+        mostrarHuellas(ultimas);
+        
+    } catch(e) {
+        console.error('Error al cargar:', e);
+        mostrarEstado('✗ no se pudieron cargar las huellas', true);
+        const lista = document.getElementById('listaHuellas');
+        lista.innerHTML = '<li style="color:#b87c4a; text-align:center;">✗ error al cargar. revisá la consola.</li>';
     }
+}
 
     function mostrarHuellas(huellas) {
         const lista = document.getElementById('listaHuellas');
